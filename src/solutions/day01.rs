@@ -10,40 +10,24 @@ const SPELLED_DIGITS: &[(&str, u32)] = &[
     ("nine", 9),
 ];
 
-fn parse_spelled_digit(line: &str) -> Option<u32> {
+fn parse_digit(line: &str) -> Option<u32> {
     SPELLED_DIGITS
         .iter()
         .find(|(word, _value)| line.starts_with(word))
         .map(|(_word, value)| *value)
+        .or(line[..1].parse().ok())
 }
 
-struct CalibrationValues {
-    simple: u32,
-    spelled: u32,
+fn simple_calibration(line: &str) -> Option<u32> {
+    let first = line.bytes().find_map(|c| (c as char).to_digit(10));
+    let last = line.bytes().rev().find_map(|c| (c as char).to_digit(10));
+    Some(10 * first? + last?)
 }
 
-fn calibration_values(line: &str) -> Option<CalibrationValues> {
-    let mut first_simple: Option<u32> = None;
-    let mut last_simple: Option<u32> = None;
-    let mut first: Option<u32> = None;
-    let mut last: Option<u32> = None;
-
-    for (i, c) in line.chars().enumerate() {
-        if let Some(value) = parse_spelled_digit(&line[i..]) {
-            first = first.or(Some(value));
-            last = Some(value);
-        } else if let Some(value) = c.to_digit(10) {
-            first_simple = first_simple.or(Some(value));
-            last_simple = Some(value);
-            first = first.or(Some(value));
-            last = Some(value);
-        }
-    }
-
-    Some(CalibrationValues {
-        simple: 10 * first_simple? + last_simple?,
-        spelled: 10 * first? + last?,
-    })
+fn spelled_calibration(line: &str) -> Option<u32> {
+    let first = (0..line.len()).find_map(|i| parse_digit(&line[i..]));
+    let last = (0..line.len()).rev().find_map(|i| parse_digit(&line[i..]));
+    Some(10 * first? + last?)
 }
 
 pub fn main(input: &str) {
@@ -51,9 +35,8 @@ pub fn main(input: &str) {
     let mut total_spelled = 0;
 
     for line in input.split('\n') {
-        let values = calibration_values(line).unwrap();
-        total_simple += values.simple;
-        total_spelled += values.spelled;
+        total_simple += simple_calibration(line).unwrap();
+        total_spelled += spelled_calibration(line).unwrap();
     }
 
     println!("*  {total_simple}");
