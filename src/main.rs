@@ -16,6 +16,7 @@ fn main() {
     match day {
         1 => solutions::day01::main(input.trim()),
         2 => solutions::day02::main(input.trim()),
+        3 => solutions::day03::main(input.trim()),
         _ => unimplemented!(),
     }
 }
