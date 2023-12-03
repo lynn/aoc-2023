@@ -3,16 +3,24 @@ use std::collections::HashMap;
 pub struct Schematic<'a> {
     string: &'a [u8],
     width: usize,
+    part_number_sum: u32,
     gears: HashMap<usize, Vec<u32>>,
 }
 
 impl<'a> Schematic<'a> {
     fn new(string: &'a str) -> Schematic<'a> {
-        Self {
+        let mut schematic = Self {
             string: string.as_bytes(),
             width: string.find('\n').unwrap() + 1,
+            part_number_sum: 0,
             gears: HashMap::new(),
+        };
+
+        for i in 0..string.len() {
+            schematic.process_number_at(i);
         }
+
+        schematic
     }
 
     fn symbol_at(&self, index: isize) -> bool {
@@ -27,10 +35,10 @@ impl<'a> Schematic<'a> {
         self.gears.entry(index).or_default().push(value);
     }
 
-    fn part_number_at(&mut self, index: usize) -> Option<u32> {
+    fn process_number_at(&mut self, index: usize) {
         if index > 0 && self.string[index - 1].is_ascii_digit() {
-            // This is the *middle* of a part number, so let's ignore it.
-            return None;
+            // This is the *middle* of a part number, so don't process here.
+            return;
         }
         let mut end = index;
         let mut value = 0;
@@ -39,7 +47,8 @@ impl<'a> Schematic<'a> {
             end += 1;
         }
         if index == end {
-            return None;
+            // There's no part number here.
+            return;
         }
 
         // Iterate over the cells around the number:
@@ -48,30 +57,26 @@ impl<'a> Schematic<'a> {
         // .123.
         // .....
         //
-        let mut result = None;
+        let mut saw_symbol = false;
         let width = self.width as isize;
         for dy in [-width, width] {
             for x in index as isize - 1..=end as isize {
                 if self.symbol_at(x + dy) {
-                    result = Some(value);
+                    saw_symbol = true;
                     self.count_gear((x + dy) as usize, value);
                 }
             }
         }
         for j in [index as isize - 1, end as isize] {
             if self.symbol_at(j) {
-                result = Some(value);
+                saw_symbol = true;
                 self.count_gear(j as usize, value)
             }
         }
 
-        result
-    }
-
-    fn part_number_sum(&mut self) -> u32 {
-        (0..self.string.len())
-            .filter_map(|i| self.part_number_at(i))
-            .sum()
+        if saw_symbol {
+            self.part_number_sum += value;
+        }
     }
 
     fn gear_ratio_sum(&self) -> u32 {
@@ -84,8 +89,8 @@ impl<'a> Schematic<'a> {
 }
 
 pub fn main(input: &str) {
-    let mut schematic = Schematic::new(input);
+    let schematic = Schematic::new(input);
 
-    println!("*  {}", schematic.part_number_sum());
+    println!("*  {}", schematic.part_number_sum);
     println!("** {}", schematic.gear_ratio_sum());
 }
