@@ -17,6 +17,7 @@ fn main() {
         1 => solutions::day01::main(input.trim()),
         2 => solutions::day02::main(input.trim()),
         3 => solutions::day03::main(input.trim()),
+        4 => solutions::day04::main(input.trim()),
         _ => unimplemented!(),
     }
 }
