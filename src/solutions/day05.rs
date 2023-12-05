@@ -81,7 +81,7 @@ impl Almanac {
         let mut paragraphs = input.split("\n\n");
         let seed_paragraph = paragraphs.next().unwrap();
         let seeds = seed_paragraph
-            .split(" ")
+            .split(' ')
             .skip(1)
             .map(|x| x.parse::<i64>().unwrap())
             .collect();
