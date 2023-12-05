@@ -12,12 +12,14 @@ fn main() {
     let input = std::fs::read_to_string(&args[2])
         .expect("couldn't read input")
         .replace('\r', "");
+    let trimmed = input.trim();
 
     match day {
-        1 => solutions::day01::main(input.trim()),
-        2 => solutions::day02::main(input.trim()),
-        3 => solutions::day03::main(input.trim()),
-        4 => solutions::day04::main(input.trim()),
+        1 => solutions::day01::main(trimmed),
+        2 => solutions::day02::main(trimmed),
+        3 => solutions::day03::main(trimmed),
+        4 => solutions::day04::main(trimmed),
+        5 => solutions::day05::main(trimmed),
         _ => unimplemented!(),
     }
 }
