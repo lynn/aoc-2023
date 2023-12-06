@@ -18,7 +18,8 @@ impl Race {
         let x1 = (-b + d.sqrt()) / (2.0 * a);
         let x2 = (-b - d.sqrt()) / (2.0 * a);
 
-        // Because 2a is negative, we have x1 < x2. We do some tricky math to get
+        // Because a is negative, we have x1 < x2, and the curve assumes
+        // positive values *between* the roots. We do some tricky math to get
         // the first and last integers in the *open* interval (x1, x2).
         let x1 = x1.floor() as i64 + 1;
         let x2 = x2.ceil() as i64 - 1;
