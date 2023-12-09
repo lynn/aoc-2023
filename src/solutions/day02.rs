@@ -15,7 +15,7 @@ impl Bag {
         let mut bag = Self::empty();
         for entry in string.split(", ") {
             let (count, color) = entry.split_once(' ').expect("bad entry");
-            let count = count.parse::<u32>().ok().expect("bad count");
+            let count = count.parse::<u32>().expect("bad count");
             match color {
                 "red" => bag.red = count,
                 "green" => bag.green = count,
@@ -53,7 +53,7 @@ impl Game {
     fn parse(line: &str) -> Self {
         let (head, body) = line.split_once(": ").expect("no colon");
         let (_game, id) = head.split_once(' ').expect("bad header");
-        let id = id.parse::<u32>().ok().expect("bad ID");
+        let id = id.parse::<u32>().expect("bad ID");
         let turns = body.split("; ").map(Bag::parse).collect();
         Game { id, turns }
     }
