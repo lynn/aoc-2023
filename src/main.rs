@@ -23,6 +23,7 @@ fn main() {
         6 => solutions::day06::main(trimmed),
         7 => solutions::day07::main(trimmed),
         8 => solutions::day08::main(trimmed),
+        9 => solutions::day09::main(trimmed),
         _ => unimplemented!(),
     }
 }
