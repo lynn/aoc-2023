@@ -1,5 +1,16 @@
 use std::collections::HashMap;
 
+fn gcd(mut a: usize, mut b: usize) -> usize {
+    while b != 0 {
+        (a, b) = (b, a % b)
+    }
+    a
+}
+
+fn lcm(a: usize, b: usize) -> usize {
+    a * b / gcd(a, b)
+}
+
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 struct Node(u32);
 
@@ -98,7 +109,7 @@ impl<'a> Desert<'a> {
             // together intead of doing, idk, some chinese remainder theorem
             // thing?
             assert_eq!(l.z_offsets, vec![l.loop_length]);
-            num::integer::lcm(acc, l.loop_length)
+            lcm(acc, l.loop_length)
         })
     }
 }
