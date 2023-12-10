@@ -1,6 +1,7 @@
 use std::{env, process::exit};
 
 mod solutions;
+mod utils;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -24,6 +25,7 @@ fn main() {
         7 => solutions::day07::main(trimmed),
         8 => solutions::day08::main(trimmed),
         9 => solutions::day09::main(trimmed),
+        10 => solutions::day10::main(trimmed),
         _ => unimplemented!(),
     }
 }
