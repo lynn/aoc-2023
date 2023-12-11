@@ -39,11 +39,19 @@ impl<T> Grid<T> {
         y as usize * (self.width + 1) + x as usize
     }
 
-    pub fn find_byte(&self, byte: u8) -> Option<(i64, i64)> {
+    pub fn byte_position(&self, byte: u8) -> Option<(i64, i64)> {
         self.bytes
             .iter()
             .position(|&b| b == byte)
             .map(|i| self.to_xy(i))
+    }
+
+    pub fn byte_positions(&self, byte: u8) -> impl Iterator<Item = (i64, i64)> + '_ {
+        self.bytes
+            .iter()
+            .enumerate()
+            .filter(move |t| *t.1 == byte)
+            .map(|t| self.to_xy(t.0))
     }
 
     pub fn get(&self, x: i64, y: i64) -> T

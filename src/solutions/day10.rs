@@ -41,7 +41,7 @@ impl Maze {
     }
 
     fn main_loop_and_distance(&self) -> (HashSet<(i64, i64)>, usize) {
-        let start = self.grid.find_byte(b'S').unwrap();
+        let start = self.grid.byte_position(b'S').unwrap();
         let mut visited: HashSet<(i64, i64)> = HashSet::new();
         let mut frontier = vec![start];
         let mut distance = 0;
