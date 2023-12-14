@@ -32,7 +32,7 @@ impl<'a> Iterator for Configurations<'a> {
                 }
             }
         }
-        return None;
+        None
     }
 }
 
@@ -41,7 +41,7 @@ fn matches(config: &[bool], nums: &[usize]) -> bool {
         .split(|b| !b)
         .map(|x| x.len())
         .filter(|x| *x > 0)
-        .eq(nums.iter().map(|x| *x))
+        .eq(nums.iter().copied())
 }
 
 fn count_configurations(pattern: &str, nums: &[usize]) -> usize {
@@ -56,7 +56,7 @@ fn count_configurations(pattern: &str, nums: &[usize]) -> usize {
 
 pub fn main(input: &str) {
     let mut sum = 0;
-    let mut sum2 = 0;
+    // let mut sum2 = 0;
     for line in input.split('\n') {
         let (pattern, nums) = line.split_once(' ').unwrap();
         let nums: Vec<usize> = nums.split(',').map(|x| x.parse().unwrap()).collect();

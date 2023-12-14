@@ -21,12 +21,22 @@ impl<T> Grid<T> {
         }
     }
 
+    #[allow(dead_code)]
+    pub fn string(&self) -> &str {
+        std::str::from_utf8(&self.bytes).unwrap()
+    }
+
     pub fn width(&self) -> usize {
         self.width
     }
 
     pub fn height(&self) -> usize {
         self.height
+    }
+
+    pub fn row(&self, y: usize) -> &[u8] {
+        let start = y * (self.width + 1);
+        &self.bytes[start..start + self.width]
     }
 
     fn to_xy(&self, index: usize) -> (i64, i64) {
@@ -59,6 +69,11 @@ impl<T> Grid<T> {
         T: From<u8>,
     {
         self.bytes[self.to_index(x, y)].into()
+    }
+
+    pub fn set(&mut self, x: i64, y: i64, b: u8) {
+        let i = self.to_index(x, y);
+        self.bytes[i] = b;
     }
 
     pub fn in_range(&self, x: i64, y: i64) -> bool {
