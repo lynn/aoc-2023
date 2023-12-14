@@ -1,5 +1,6 @@
 use std::marker::PhantomData;
 
+#[derive(Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Grid<T> {
     bytes: Vec<u8>,
     width: usize,
