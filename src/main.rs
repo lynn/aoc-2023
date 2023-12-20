@@ -35,6 +35,7 @@ fn main() {
         17 => solutions::day17::main(trimmed),
         18 => solutions::day18::main(trimmed),
         19 => solutions::day19::main(trimmed),
+        20 => solutions::day20::main(trimmed),
         _ => unimplemented!(),
     }
 }
